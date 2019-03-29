@@ -2,5 +2,5 @@
 Learning Java Development in OTUS company (March of 2019)
 
 Студент:
-Denisov Viktor (Денисов Виктор)
+Viktor Denisov (Виктор Денисов)
 denisov.victory@gmail.com
