@@ -1,4 +1,4 @@
-package homework.otus.hw01;
+package ru.otus.homework.hw01;
 
 import com.google.common.base.*;
 

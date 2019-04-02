@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>homework.otus</groupId>
+		<groupId>ru.otus.homework</groupId>
 		<artifactId>OtusJavaHW</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -42,7 +42,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>homework.otus.hw01.HelloOTUS</mainClass>
+							<mainClass>ru.otus.homework.hw01.HelloOTUS</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
