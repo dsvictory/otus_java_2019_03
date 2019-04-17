@@ -14,6 +14,7 @@
 
 	<modules>
 		<module>HW01.1-maven</module>
+		<module>HW02.1-collections</module>
 	</modules>
 
 	<properties>
