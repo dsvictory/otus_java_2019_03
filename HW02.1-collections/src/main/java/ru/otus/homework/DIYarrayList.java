@@ -101,8 +101,15 @@ public class DIYarrayList<E> implements List<E> {
 	}
 
 	@Override
-	public boolean add(E e) {
-		throw new UnsupportedOperationException();
+	public boolean add(E newElement) {
+		int currentSize = this.size;
+		Object[] currentCollectionArray = this.dataArray;
+		if (currentSize == currentCollectionArray.length) {
+			currentCollectionArray = growArrayCapacity();
+		}
+		currentCollectionArray[currentSize] = newElement;
+        size = currentSize + 1;
+        return true;
 	}
 
 	@Override
@@ -121,7 +128,6 @@ public class DIYarrayList<E> implements List<E> {
 	@Override
 	public boolean addAll(Collection<? extends E> collection) {
 		
-		//Проверяем на пустоту пришедшую коллекцию
 		Object[] addingCollectionArray = collection.toArray();
         int numNewElements = addingCollectionArray.length;
         if (numNewElements == 0) {
@@ -148,6 +154,10 @@ public class DIYarrayList<E> implements List<E> {
 	private Object[] growArrayCapacity(int minCapacity) {
 		return Arrays.copyOf(dataArray, newCapacity(minCapacity));
 	}
+	
+	private Object[] growArrayCapacity() {
+        return growArrayCapacity(size + 1);
+    }
 	
 	/**
 	 * Этот метод инкапсулирует любую логику создания запаса
@@ -220,8 +230,23 @@ public class DIYarrayList<E> implements List<E> {
 
 	@Override
 	public void add(int index, E element) {
-		throw new UnsupportedOperationException();
+		rangeCheckForAdd(index);
+        int currentCollectionSize = this.size;
+        Object[] currentCollectionArray = this.dataArray;
+        if (currentCollectionSize == currentCollectionArray.length)
+        	currentCollectionArray = growArrayCapacity();
+        System.arraycopy(this.dataArray, index,
+                         this.dataArray, index + 1,
+                         currentCollectionSize - index);
+        this.dataArray[index] = element;
+        size = currentCollectionSize + 1;
 	}
+	
+	private void rangeCheckForAdd(int index) {
+        if (index > size || index < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+    }
 
 	@Override
 	public E remove(int index) {
@@ -279,14 +304,12 @@ public class DIYarrayList<E> implements List<E> {
 
 		@Override
 		public boolean hasPrevious() {
-			// TODO Auto-generated method stub
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public E previous() {
-			// TODO Auto-generated method stub
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -296,14 +319,12 @@ public class DIYarrayList<E> implements List<E> {
 
 		@Override
 		public int previousIndex() {
-			// TODO Auto-generated method stub
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void remove() {
-			// TODO Auto-generated method stub
-			
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -318,8 +339,7 @@ public class DIYarrayList<E> implements List<E> {
 
 		@Override
 		public void add(E e) {
-			// TODO Auto-generated method stub
-			
+			throw new UnsupportedOperationException();
 		}		
 	}
 	
