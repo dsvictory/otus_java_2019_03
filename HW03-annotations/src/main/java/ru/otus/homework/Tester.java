@@ -65,6 +65,17 @@ public class Tester {
 	private boolean isAfterEachCollectionEmpty() {
 		return afterEachMethods.size() == 0;
 	}
+	
+	private void launchAfterEachMethods(Object testObject) {
+		try {
+			for (Method afterEachMethod : afterEachMethods) {
+				afterEachMethod.invoke(testObject, null);
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Ошибка в методах после тестов!");
+		}
+	}
 
 	private void launchTest(Object testObject, Method testMethod) {
 		try {
@@ -74,16 +85,15 @@ public class Tester {
 				}
 			}
 			
-			testMethod.invoke(testObject, null);
-			
-			if (!isAfterEachCollectionEmpty()) {
-				for (Method afterEachMethod : afterEachMethods) {
-					afterEachMethod.invoke(testObject, null);
-				}
-			}
+			testMethod.invoke(testObject, null);	
 		}
 		catch (Exception e) {
 			System.out.println("Ошибка во время теста " + testMethod.getName());
+		}
+		finally {
+			if (!isAfterEachCollectionEmpty()) {
+				launchAfterEachMethods(testObject);
+			}
 		}
 	}
 	
