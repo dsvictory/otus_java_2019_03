@@ -13,65 +13,70 @@ import java.util.List;
 import javax.swing.Timer;
 
 /*
-Запуск всех GC проводился с параметрами памяти
+Р—Р°РїСѓСЃРє РІСЃРµС… GC РїСЂРѕРІРѕРґРёР»СЃСЏ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё РїР°РјСЏС‚Рё
 -Xms512m -Xmx512m
 
-Никаких ограничений на время задержки сборщиков мусора я не ставил.
+РќРёРєР°РєРёС… РѕРіСЂР°РЅРёС‡РµРЅРёР№ РЅР° РІСЂРµРјСЏ Р·Р°РґРµСЂР¶РєРё СЃР±РѕСЂС‰РёРєРѕРІ РјСѓСЃРѕСЂР° СЏ РЅРµ СЃС‚Р°РІРёР».
 
 1. -XX:+UseSerialGC
 Starting pid: 7340@DESKTOP-LL18RAV
 GC name:Copy
 GC name:MarkSweepCompact
-После 1 минуты... Young сборок: 4 (stop на 934 ms), Old сборок: 1 (stop на 934 ms)
-После 2 минуты... Young сборок: 2 (stop на 0 ms), Old сборок: 2 (stop на 2586 ms)
-После 3 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 2 (stop на 3147 ms)
-После 4 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 31 (stop на 44197 ms)
-После 5 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 28 (stop на 39870 ms)
+РџРѕСЃР»Рµ 1 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 4 (stop РЅР° 934 ms), Old СЃР±РѕСЂРѕРє: 1 (stop РЅР° 934 ms)
+РџРѕСЃР»Рµ 2 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 2 (stop РЅР° 0 ms), Old СЃР±РѕСЂРѕРє: 2 (stop РЅР° 2586 ms)
+РџРѕСЃР»Рµ 3 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms), Old СЃР±РѕСЂРѕРє: 2 (stop РЅР° 3147 ms)
+РџРѕСЃР»Рµ 4 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms), Old СЃР±РѕСЂРѕРє: 31 (stop РЅР° 44197 ms)
+РџРѕСЃР»Рµ 5 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms), Old СЃР±РѕСЂРѕРє: 28 (stop РЅР° 39870 ms)
 Exception in thread "main"
 java.lang.OutOfMemoryError: Java heap space
 	at ru.otus.homework.Benchmark.run(Benchmark.java:24)
 	at ru.otus.homework.TesterGC.main(TesterGC.java:66)
 	
-Самый стопорящий программу тип сборщика.
+РЎР°РјС‹Р№ СЃС‚РѕРїРѕСЂСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјСѓ С‚РёРї СЃР±РѕСЂС‰РёРєР°.
+
+	
 	
 2. -XX:+UseParallelGC
 Starting pid: 6632@DESKTOP-LL18RAV
 GC name:PS MarkSweep
 GC name:PS Scavenge
-После 1 минуты... Young сборок: 4 (stop на 1079 ms), Old сборок: 2 (stop на 2119 ms)
-После 2 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 1 (stop на 1071 ms)
-После 3 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 2 (stop на 2685 ms)
-После 4 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 12 (stop на 22851 ms)
-После 5 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 1 (stop на 2013 ms)
+РџРѕСЃР»Рµ 1 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 4 (stop РЅР° 1079 ms), Old СЃР±РѕСЂРѕРє: 2 (stop РЅР° 2119 ms)
+РџРѕСЃР»Рµ 2 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms), Old СЃР±РѕСЂРѕРє: 1 (stop РЅР° 1071 ms)
+РџРѕСЃР»Рµ 3 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms), Old СЃР±РѕСЂРѕРє: 2 (stop РЅР° 2685 ms)
+РџРѕСЃР»Рµ 4 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms), Old СЃР±РѕСЂРѕРє: 12 (stop РЅР° 22851 ms)
+РџРѕСЃР»Рµ 5 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms), Old СЃР±РѕСЂРѕРє: 1 (stop РЅР° 2013 ms)
 Exception in thread "main"
 java.lang.OutOfMemoryError: GC overhead limit exceeded
 
-По сравнению с Serial значительное уменьшение пауз в работе программы.
+РџРѕ СЃСЂР°РІРЅРµРЅРёСЋ СЃ Serial Р·РЅР°С‡РёС‚РµР»СЊРЅРѕРµ СѓРјРµРЅСЊС€РµРЅРёРµ РїР°СѓР· РІ СЂР°Р±РѕС‚Рµ РїСЂРѕРіСЂР°РјРјС‹.
+
+
 
 3. -XX:+UseG1GC
 Starting pid: 14836@DESKTOP-LL18RAV
 GC name:G1 Young Generation
 GC name:G1 Old Generation
-После 1 минуты... Young сборок: 14 (stop на 1170 ms), Old сборок: 0 (stop на 0 ms)
-После 2 минуты... Young сборок: 6 (stop на 497 ms), Old сборок: 0 (stop на 0 ms)
-После 3 минуты... Young сборок: 6 (stop на 351 ms), Old сборок: 0 (stop на 0 ms)
-После 4 минуты... Young сборок: 6 (stop на 362 ms), Old сборок: 1 (stop на 1091 ms)
-После 5 минуты... Young сборок: 15 (stop на 492 ms), Old сборок: 19 (stop на 21744 ms)
+РџРѕСЃР»Рµ 1 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 14 (stop РЅР° 1170 ms), Old СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms)
+РџРѕСЃР»Рµ 2 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 6 (stop РЅР° 497 ms), Old СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms)
+РџРѕСЃР»Рµ 3 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 6 (stop РЅР° 351 ms), Old СЃР±РѕСЂРѕРє: 0 (stop РЅР° 0 ms)
+РџРѕСЃР»Рµ 4 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 6 (stop РЅР° 362 ms), Old СЃР±РѕСЂРѕРє: 1 (stop РЅР° 1091 ms)
+РџРѕСЃР»Рµ 5 РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: 15 (stop РЅР° 492 ms), Old СЃР±РѕСЂРѕРє: 19 (stop РЅР° 21744 ms)
 Exception in thread "main" start:295161 Name:G1 Old Generation, action:end of major GC, gcCause:G1 Evacuation Pause(1200 ms)
 java.lang.OutOfMemoryError: Java heap space
 	at ru.otus.homework.Benchmark.run(Benchmark.java:24)
 	at ru.otus.homework.TesterGC.main(TesterGC.java:85)
 
+РќР° СЌС‚РѕРј СЃР±РѕСЂС‰РёРєРµ РѕС‡РµСЂРµРґРЅР°СЏ РїСЂРѕРїР°СЃС‚СЊ РІ СЃС‚РѕСЂРѕРЅСѓ СѓРјРµРЅСЊС€РµРЅРёСЏ РїР°СѓР· РІ СЂР°Р±РѕС‚Рµ РїСЂРѕРіСЂР°РјРјС‹,
+РїСЂРё СЌС‚РѕРј, РїСЂРѕРіР»СЏРґС‹РІР°СЏ Р±РѕР»РµРµ РїРѕРґСЂРѕР±РЅС‹Рµ Р»РѕРіРё, Р±СЂРѕСЃР°РµС‚СЃСЏ РІ РіР»Р°Р·Р°, С‡С‚Рѕ РѕРЅ РІ РѕС‚Р»РёС‡РёРµ РѕС‚ РґСЂСѓРіРёС… СЃР±РѕСЂС‰РёРєРѕРІ
+РґРµР»Р°РµС‚ Р·Р°РґРµСЂР¶РєРё С‡Р°С‰Рµ РѕСЃС‚Р°Р»СЊРЅС‹С…, РЅРѕ РїСЂРё СЌС‚РѕРј РєСЂР°Р№РЅРµ РєРѕСЂРѕС‚РєРёРµ. РћРґРЅРѕР·РЅР°С‡РЅРѕ С„Р°РІРѕСЂРёС‚.
 
-На этом сборщике очередная пропасть в сторону уменьшения пауз в работе программы,
-при этом, проглядывая более подробные логи, бросается в глаза, что он в отличие от других сборщиков
-делает задержки чаще остальных, но при этом крайне короткие. Однозначно фаворит.
+
 
 4. -XX:+UnlockExperimentalVMOptions -XX:+UseZGC 
 Error occurred during initialization of VM
 Option -XX:+UseZGC not supported
 
-Стоит 11 java, брал с сайта Oracle, 
+РЎС‚РѕРёС‚ 11 java, Р±СЂР°Р» СЃ СЃР°Р№С‚Р° Oracle. РџРѕРєР° РЅРµ СЂР°Р·РѕР±СЂР°Р»СЃСЏ, РєР°Рє Р·Р°РїСѓСЃС‚РёС‚СЊ.
 
  */
 
@@ -96,7 +101,7 @@ public class TesterGC {
         mbs.registerMBean(mbean, name);
         
         Timer timer = new Timer(60000, x -> {
-        	System.out.printf("После %s минуты... Young сборок: %d (stop на %d ms), Old сборок: %d (stop на %d ms)\n",
+        	System.out.printf("РџРѕСЃР»Рµ %s РјРёРЅСѓС‚С‹... Young СЃР±РѕСЂРѕРє: %d (stop РЅР° %d ms), Old СЃР±РѕСЂРѕРє: %d (stop РЅР° %d ms)\n",
         			currentMinute,
 	    			youngCountInMinute,
 	    			youngDuration,
