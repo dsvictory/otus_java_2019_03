@@ -47,10 +47,8 @@ GC name:MarkSweepCompact
 После 3 минуты... Young сборок: 1 (stop на 0 ms), Old сборок: 2 (stop на 3133 ms)
 Операций было проведено: 4832320
 После 4 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 9 (stop на 14359 ms)
-start:241213 Name:MarkSweepCompact, action:end of major GC, gcCause:Allocation Failure(1429 ms)
 Операций было проведено: 3089120
 После 5 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 34 (stop на 54685 ms)
-start:301602 Name:MarkSweepCompact, action:end of major GC, gcCause:Allocation Failure(1465 ms)
 Операций было проведено: 246400
 	
 	
@@ -101,6 +99,20 @@ java.lang.OutOfMemoryError: Java heap space
 при этом, проглядывая более подробные логи, бросается в глаза, что он в отличие от других сборщиков
 делает задержки чаще остальных, но при этом крайне короткие. Однозначно фаворит.
 
+
+Результаты того же сборщика с измерением количества операций в минуту array[i] = new String(new char[0]);
+
+Starting pid: 3804@DESKTOP-LL18RAV
+GC name:G1 Young Generation
+GC name:G1 Old Generation
+После 1 минуты... Young сборок: 15 (stop на 1172 ms), Old сборок: 0 (stop на 0 ms)
+Операций было проведено: 19630720
+После 2 минуты... Young сборок: 6 (stop на 421 ms), Old сборок: 0 (stop на 0 ms)
+Операций было проведено: 6376320
+После 3 минуты... Young сборок: 6 (stop на 323 ms), Old сборок: 0 (stop на 0 ms)
+Операций было проведено: 4501760
+После 4 минуты... Young сборок: 6 (stop на 448 ms), Old сборок: 1 (stop на 1170 ms)
+Операций было проведено: 3673120
 
 
 4. -XX:+UnlockExperimentalVMOptions -XX:+UseZGC 
