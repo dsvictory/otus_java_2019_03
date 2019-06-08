@@ -34,6 +34,24 @@ java.lang.OutOfMemoryError: Java heap space
 	
 Самый стопорящий программу тип сборщика.
 
+
+Результаты того же сборщика с измерением количества операций в минуту array[i] = new String(new char[0]);
+
+Starting pid: 15692@DESKTOP-LL18RAV
+GC name:Copy
+GC name:MarkSweepCompact
+После 1 минуты... Young сборок: 4 (stop на 1099 ms), Old сборок: 1 (stop на 1024 ms)
+Операций было проведено: 20288480
+После 2 минуты... Young сборок: 1 (stop на 0 ms), Old сборок: 1 (stop на 1407 ms)
+Операций было проведено: 6877440
+После 3 минуты... Young сборок: 1 (stop на 0 ms), Old сборок: 2 (stop на 3133 ms)
+Операций было проведено: 4832320
+После 4 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 9 (stop на 14359 ms)
+start:241213 Name:MarkSweepCompact, action:end of major GC, gcCause:Allocation Failure(1429 ms)
+Операций было проведено: 3089120
+После 5 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 34 (stop на 54685 ms)
+start:301602 Name:MarkSweepCompact, action:end of major GC, gcCause:Allocation Failure(1465 ms)
+Операций было проведено: 246400
 	
 	
 2. -XX:+UseParallelGC
@@ -50,6 +68,19 @@ java.lang.OutOfMemoryError: GC overhead limit exceeded
 
 По сравнению с Serial значительное уменьшение пауз в работе программы.
 
+Результаты того же сборщика с измерением количества операций в минуту array[i] = new String(new char[0]);
+
+Starting pid: 12116@DESKTOP-LL18RAV
+GC name:PS MarkSweep
+GC name:PS Scavenge
+После 1 минуты... Young сборок: 4 (stop на 1019 ms), Old сборок: 2 (stop на 2279 ms)
+Операций было проведено: 20222080
+После 2 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 2 (stop на 2797 ms)
+Операций было проведено: 6985920
+После 3 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 2 (stop на 3000 ms)
+Операций было проведено: 4910400
+После 4 минуты... Young сборок: 0 (stop на 0 ms), Old сборок: 11 (stop на 22268 ms)
+Операций было проведено: 1389760
 
 
 3. -XX:+UseG1GC
@@ -90,6 +121,8 @@ public class TesterGC {
 	
 	public static int currentMinute = 1;
 	
+	public static int operationInMinute = 0;
+	
 	public static void main(String[] args) throws Exception {
 		
 		System.out.println("Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());
@@ -107,11 +140,18 @@ public class TesterGC {
 	    			youngDuration,
 	    			oldCountInMinute,
 	    			oldDuration);
+        	
+        	System.out.println("Операций было проведено: " + operationInMinute);
+        	
+        	operationInMinute = 0;
+        	
         	currentMinute++;
         	youngCountInMinute = 0;
         	youngDuration = 0;
         	oldCountInMinute = 0;
         	oldDuration = 0;
+        	
+        	
         });
         timer.start();
         mbean.run();

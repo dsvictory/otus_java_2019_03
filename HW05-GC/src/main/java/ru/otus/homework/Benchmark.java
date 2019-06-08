@@ -21,6 +21,7 @@ public class Benchmark implements BenchmarkMBean {
 	        	for (int k = 0; k < count; k++) {
 	        		String[] array = new String[size];
 	        		for (int i = 0; i < size; i++) {
+	        			TesterGC.operationInMinute++;
 	        			array[i] = new String(new char[0]);
 	        		}
 	        		list.add(array);
