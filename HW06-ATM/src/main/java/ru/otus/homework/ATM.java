@@ -83,7 +83,7 @@ public class ATM implements CompositeMoneyKeeper<ConcreteRatingMoneyKeeper> {
 		return cellsCollection.stream().mapToInt(x -> x.getRemainingMoney()).sum();
 	}
 	
-	private void SetCellsCollection() {
+	private void setCellsCollection() {
 		cellsCollection.add(new ATMCell(CurrencyRating.Ten));
 		cellsCollection.add(new ATMCell(CurrencyRating.Fifty));
 		cellsCollection.add(new ATMCell(CurrencyRating.OneHundred));
