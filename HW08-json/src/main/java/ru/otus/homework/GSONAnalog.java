@@ -8,157 +8,209 @@ public class GSONAnalog {
 	
 	private static final String WTF_MESSAGE = "(〃＞＿＜;〃)";
 	
-	public static final Class<?>[] INTEGERS = new Class<?>[] { byte.class, short.class, int.class, long.class };
-	public static final Class<?>[] FLOATS = new Class<?>[] { float.class, double.class };
-	public static final Class<Boolean> BOOLEAN = boolean.class;
-	public static final Class<Character> CHAR = char.class;
-	public static final Class<String> STRING = String.class;
-	public static final Class<Collection> COLLECTION = Collection.class;
+	public String toJson(Object obj) {
+		return toJsonValue(obj).toString();
+	}
 	
-	public JsonObject toJson(Object obj) {
+	private JsonValue toJsonValue(Object obj) {
+		
+		if (obj == null) { return JsonValue.NULL; }
+		
+		Class<?> clazz = obj.getClass();
+		
+		if (clazz.equals(Byte.class)) {
+			 return Json.createValue((Byte)obj);
+		}
+		else if (clazz.equals(Short.class)) {
+			return Json.createValue((Short)obj);
+		}
+		else if (clazz.equals(Integer.class)) {
+			return Json.createValue((Integer)obj);
+		}
+		else if (clazz.equals(Long.class)) {
+			return Json.createValue((Long)obj);
+		}
+		else if (clazz.equals(Float.class)) {
+			return Json.createValue((Float)obj);
+		}
+		else if (clazz.equals(Double.class)) {
+			return Json.createValue((Double)obj);
+		}
+		else if (clazz.equals(Boolean.class)) {
+			Boolean value = (Boolean)obj;
+			return value ? JsonValue.TRUE : JsonValue.FALSE;
+		}
+		else if (clazz.equals(String.class) || clazz.equals(Character.class)) {
+			return Json.createValue(obj.toString());
+		}
+		else if (isCollection(clazz)) {
+			return collectionToJsonValue((Collection)obj);
+		}
+		else if (clazz.isArray()) {
+			return arrayToJsonValue(obj);
+		}
+		else {
+			return objectToJsonValue(obj);
+		}
+	}
+	
+	private JsonValue collectionToJsonValue(Collection collection) {
+		
+		if (collection.isEmpty()) { return Json.createArrayBuilder().build(); }
+		
+		Class<?> componentType = collection.stream().findFirst().get().getClass();
+		
+		if (componentType.isPrimitive() || isPrimitiveWrapper(componentType) || componentType.equals(String.class)) {
+			return Json.createArrayBuilder(collection).build();
+		}
+		else {
+			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+			for (Object el : collection) {
+				arrayBuilder.add(toJsonValue(el));
+			}
+			return arrayBuilder.build();
+		}
+		
+	}
+	
+	private JsonValue arrayToJsonValue(Object arrayObj) {
+		
+		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+		if (Array.getLength(arrayObj) == 0) { return arrayBuilder.build(); }
+		
+		Class<?> componentType = arrayObj.getClass().getComponentType();
+		
+		if (componentType.isPrimitive()) {
+			if (componentType.equals(byte.class)) {
+				byte[] array = (byte[])arrayObj;
+				for (byte b : array) {
+					arrayBuilder.add(b);
+				}
+				return arrayBuilder.build();
+			}
+			else if (componentType.equals(short.class)) {
+				short[] array = (short[])arrayObj;
+				for (short s : array) {
+					arrayBuilder.add(s);
+				}
+				return arrayBuilder.build();
+			}
+			else if (componentType.equals(int.class)) {
+				int[] array = (int[])arrayObj;
+				for (int i : array) {
+					arrayBuilder.add(i);
+				}
+				return arrayBuilder.build();
+			}
+			else if (componentType.equals(long.class)) {
+				long[] array = (long[])arrayObj;
+				for (long l : array) {
+					arrayBuilder.add(l);
+				}
+				return arrayBuilder.build();
+			}
+			else if (componentType.equals(float.class)) {
+				float[] array = (float[])arrayObj;
+				for (float f : array) {
+					arrayBuilder.add(f);
+				}
+				return arrayBuilder.build();
+			}
+			else if (componentType.equals(double.class)) {
+				double[] array = (double[])arrayObj;
+				for (double d : array) {
+					arrayBuilder.add(d);
+				}
+				return arrayBuilder.build();
+			}
+			else if (componentType.equals(boolean.class)) {
+				for (boolean el : (boolean[])arrayObj) {
+					Boolean value = (Boolean)el;
+					arrayBuilder.add(value ? JsonValue.TRUE : JsonValue.FALSE);
+				}
+				return arrayBuilder.build();
+			}
+			else if (componentType.equals(char.class)) {
+				for (char el : (char[])arrayObj) {
+					arrayBuilder.add(Json.createValue(String.valueOf(el)));
+				}
+				return arrayBuilder.build();
+			}
+			else {
+				String[] array = (String[])arrayObj;
+				return Json.createArrayBuilder(Arrays.asList(array)).build();
+			}
+		}
+		else {
+			for (Object el : (Object[])arrayObj) {
+				arrayBuilder.add(toJsonValue(el));
+			}
+			return arrayBuilder.build();
+		}
+	}
+	
+	private JsonValue objectToJsonValue(Object obj) {
 		
 		JsonObjectBuilder builder = Json.createObjectBuilder();
 		
 		Field[] fields = obj.getClass().getDeclaredFields();
 		for (Field field : fields) {
-			setFieldToBuilder(builder, field, obj);
+			
+			boolean isAccessible = field.canAccess(obj);
+			if (!isAccessible) { field.setAccessible(true); }
+			
+			try {
+				JsonValue jsonValue = toJsonValue(field.get(obj));
+				builder.add(field.getName(), jsonValue);
+			} 
+			catch (Exception e) {
+				System.out.println(WTF_MESSAGE);
+				System.out.println(e.getMessage());
+			}
+			
+			if (!isAccessible) { field.setAccessible(false); }
 		}
 		
 		return builder.build();
 	}
 	
-	private JsonObjectBuilder setFieldToBuilder(JsonObjectBuilder builder, Field field, Object obj) {
-		
-		boolean isAccessible = field.canAccess(obj);
-		if (!isAccessible) { field.setAccessible(true); }
-		
-		if (field.getType().isPrimitive()) {
-			setPrimitiveFieldToBuilder(builder, field, obj);
-		}
-		else {
-			setObjectFieldToBuilder(builder, field, obj);
-		}
-		
-		if (!isAccessible) { field.setAccessible(false); }
-		
-		return builder;
-	}
-	
-	private JsonObjectBuilder setPrimitiveFieldToBuilder(JsonObjectBuilder builder, Field field, Object obj) {
-		
-		Class<?> type = field.getType();
-		String name = field.getName();
-		
-		try {
-			if (Arrays.asList(INTEGERS).contains(type)) {
-				builder.add(name, field.getLong(obj));	
-			}
-			if (Arrays.asList(FLOATS).contains(type)) {
-				builder.add(name, field.getDouble(obj));
-			}
-			if (type.equals(BOOLEAN)) {
-				builder.add(name, field.getBoolean(obj));
-			}
-			if (type.equals(CHAR)) {
-				builder.add(name, field.getChar(obj));
-			}
-		} catch (Exception e) {
-			System.out.println(WTF_MESSAGE);
-			System.out.println(e.getMessage());
-		}
-		
-		return builder;
-	}
-	
-	private JsonObjectBuilder setObjectFieldToBuilder(JsonObjectBuilder builder, Field field, Object obj) {
-		
-		Class<?> type = checkType(field.getType());
-		String name = field.getName();
-		
-		try {
-			if (type.equals(STRING)) {
-				builder.add(name, (String)field.get(obj));	
-			} 
-			else if (type.isArray()) {
-				/*
-				 * В этом месте упадет, если в массиве будет использоваться примитив, а не обертка,
-				 * так как примитив нельзя привести к Object.
-				 */
-				Object[] array = (Object[])field.get(obj);
-
-				JsonArrayBuilder arrayBuilder;
-				Class<?> componentType = checkType(array.getClass().getComponentType());
-				if (componentType.isPrimitive() || componentType.equals(STRING)) {
-					arrayBuilder = Json.createArrayBuilder(Arrays.asList(array));
-				}
-				else {
-					arrayBuilder = Json.createArrayBuilder();
-					for (var element : array) {
-						arrayBuilder.add(toJson(element));
-					}
-				}
-				builder.add(name, arrayBuilder);
-			}
-			else if (isCollection(type)) {
-				Collection collection = (Collection)field.get(obj);
-				if (collection.isEmpty()) return builder;
-				
-				JsonArrayBuilder arrayBuilder;
-				Class<?> componentType = checkType(collection.stream().findFirst().get().getClass());
-				/*
-				 * Здесь, если не привести к примитиву тип элементов коллекции,
-				 * isPrimitive() не вернет true, и мы не сможем значительно более удобную
-				 * перегрузку использовать Json.createArrayBuilder(Collection<?> collection),
-				 * которая падает, если туда засунуть коллекцию объектов, кроме типа String.
-				 * Потому используется конверсия типов оберток к примитивным аналогам.
-				 */
-				if (componentType.isPrimitive() || componentType.equals(STRING)) {
-					arrayBuilder = Json.createArrayBuilder(collection);
-				}
-				else {
-					arrayBuilder = Json.createArrayBuilder();
-					for (var element : collection) {
-						arrayBuilder.add(toJson(element));
-					}
-				}
-				builder.add(name, arrayBuilder);
-			}
-			else {
-				JsonObject jsonObj = toJson(field.get(obj));
-				builder.add(name, jsonObj);
-			}
-		} catch (Exception e) {
-			System.out.println(WTF_MESSAGE);
-			System.out.println(e.getMessage());
-		}
-		
-		return builder;
-	}
 	
 	private boolean isCollection(Class<?> type) {
-		return 
-			Arrays.asList(type.getInterfaces()).contains(COLLECTION)
-			|| type.equals(COLLECTION);
+		boolean result = false;
+		
+		Class<?>[] interfaces = type.getInterfaces();
+		
+		if (Arrays.asList(interfaces).contains(Collection.class)) { return true; }
+		
+		for (Class<?> clazz : interfaces) {
+			boolean isCollectionInInterfacesHierarchy = isCollection(clazz);
+			if (isCollectionInInterfacesHierarchy) {
+				result = true;
+				break;
+			}
+		}
+		
+		if (result != true) {
+			
+			Class<?> superClass = type.getSuperclass();
+			if (superClass != null) {
+				result = isCollection(superClass);
+			}
+		}
+		
+		return result;
 	}
 	
-	/**
-	 * Метод используется для конверсии типов к примитивам
-	 * при работе с коллекциями. Либо так, либо писать свой метод isPrimitive(),
-	 * в котором держать список всех оберток.
-	 * @param typeForChecking
-	 * @return
-	 */
-	private Class<?> checkType(Class<?> typeForChecking) {
-		if (typeForChecking.equals(Boolean.class)) return boolean.class;
-		if (typeForChecking.equals(Byte.class)) return byte.class;
-		if (typeForChecking.equals(Short.class)) return short.class;
-		if (typeForChecking.equals(Integer.class)) return int.class;
-		if (typeForChecking.equals(Long.class)) return long.class;
-		if (typeForChecking.equals(Character.class)) return char.class;
-		if (typeForChecking.equals(Float.class)) return float.class;
-		if (typeForChecking.equals(Double.class)) return double.class;
-		
-		return typeForChecking;
+	private boolean isPrimitiveWrapper(Class<?> type) {
+		return
+			type.equals(Byte.class) ||
+			type.equals(Short.class) ||
+			type.equals(Integer.class) ||
+			type.equals(Long.class) ||
+			type.equals(Float.class) ||
+			type.equals(Double.class) ||
+			type.equals(Boolean.class) ||
+			type.equals(Character.class);
 	}
 	
 }
