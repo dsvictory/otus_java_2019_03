@@ -1,5 +1,6 @@
 package ru.otus.homework;
 
+import java.math.BigDecimal;
 import java.sql.*;
 
 public class JDBCdemo {
@@ -59,9 +60,9 @@ public class JDBCdemo {
 		
 		demo.createAccountTable();
 		
-		Account account1 = new Account(1, "First", 100);
-		Account account2 = new Account(2, "Second", 200);
-		Account account3 = new Account(3, "Third", 300);
+		Account account1 = new Account(1, "First", new BigDecimal(100));
+		Account account2 = new Account(2, "Second", new BigDecimal(200));
+		Account account3 = new Account(3, "Third", new BigDecimal(300));
 		
 		templateAccount.create(account1);
 		templateAccount.create(account2);
@@ -76,9 +77,9 @@ public class JDBCdemo {
 		System.out.println(selectedAccount3);
 		
 		account1.setType("CHANGED!!!");
-		account2.setRest(9000);
+		account2.setRest(new BigDecimal(9000));
 		account3.setType("Yeah!");
-		account3.setRest(805);
+		account3.setRest(new BigDecimal(805));
 		
 		templateAccount.update(account1);
 		templateAccount.update(account2);

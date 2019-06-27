@@ -3,11 +3,13 @@ package ru.otus.homework;
 public class User {
 
 	@Id
-	private final long id;
+	private long id;
 	
 	private String name;
 	
 	private int age;
+	
+	public User() {}
 	
 	public User(long id, String name, int age) {
 		this.id = id;

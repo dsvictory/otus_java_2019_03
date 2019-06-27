@@ -1,15 +1,19 @@
 package ru.otus.homework;
 
+import java.math.BigDecimal;
+
 public class Account {
 
 	@Id
-	private final long no;
+	private long no;
 	
 	private String type;
 	
-	private int rest;
+	private BigDecimal rest;
 	
-	public Account(long no, String type, int rest) {
+	public Account() {}
+	
+	public Account(long no, String type, BigDecimal rest) {
 		this.no = no;
 		this.type = type;
 		this.rest = rest;
@@ -23,7 +27,7 @@ public class Account {
 		return type;
 	}
 	
-	public int getRest() {
+	public BigDecimal getRest() {
 		return rest;
 	}
 	
@@ -31,7 +35,7 @@ public class Account {
 		this.type = type;
 	}
 	
-	public void setRest(int rest) {
+	public void setRest(BigDecimal rest) {
 		this.rest = rest;
 	}
 	
