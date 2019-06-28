@@ -1,6 +1,8 @@
-package ru.otus.homework;
+package ru.otus.homework.model;
 
 import java.math.BigDecimal;
+
+import ru.otus.homework.jdbc.Id;
 
 public class Account {
 

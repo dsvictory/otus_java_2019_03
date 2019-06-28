@@ -3,6 +3,11 @@ package ru.otus.homework;
 import java.math.BigDecimal;
 import java.sql.*;
 
+import ru.otus.homework.jdbc.JDBCTemplate;
+import ru.otus.homework.jdbc.JDBCTemplateImp;
+import ru.otus.homework.model.Account;
+import ru.otus.homework.model.User;
+
 public class JDBCdemo {
 
 	private static final String URL = "jdbc:h2:mem:";
@@ -15,7 +20,7 @@ public class JDBCdemo {
 		
 		System.out.println("USERS TEST!!!");
 		
-		JDBCTemplate<User> templateUser = new JDBCTemplateExample<User>(demo.getConnection());
+		JDBCTemplate<User> templateUser = new JDBCTemplateImp<User>(User.class, demo.getConnection());
 	
 		demo.createUserTable();
 		
@@ -56,7 +61,7 @@ public class JDBCdemo {
 		System.out.println();
 		System.out.println("ACCOUNTS TEST!!!");
 		
-		JDBCTemplate<Account> templateAccount = new JDBCTemplateExample<Account>(demo.getConnection());
+		JDBCTemplate<Account> templateAccount = new JDBCTemplateImp<Account>( Account.class, demo.getConnection());
 		
 		demo.createAccountTable();
 		

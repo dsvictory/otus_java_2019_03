@@ -1,4 +1,4 @@
-package ru.otus.homework;
+package ru.otus.homework.jdbc;
 
 public interface JDBCTemplate<T> {
 

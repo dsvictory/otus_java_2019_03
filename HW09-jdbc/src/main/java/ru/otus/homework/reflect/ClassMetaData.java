@@ -1,28 +1,28 @@
-package ru.otus.homework;
+package ru.otus.homework.reflect;
 
 import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-public class ClassReflectionParts {
+public class ClassMetaData {
 
-	public final String simpleName;
+	private String simpleName;
 	
-	public final Field[] fields;
-	public final String fieldsNames;
+	private Field[] fields;
+	private String fieldsNames;
 	
-	public final Field idField;
-	public final String idFieldName;
-	public final Field[] notIdFields;
+	private Field idField;
+	private String idFieldName;
+	private Field[] notIdFields;
 	
-	public final Constructor<?> defaultConstructor;
+	private Constructor<?> defaultConstructor;
 	
-	public final String insertCommand;
-	public final String updateCommand;
-	public final String selectCommand;
+	private String insertCommand;
+	private String updateCommand;
+	private String selectCommand;
 	
-	public ClassReflectionParts(Class<?> clazz) {
+	public ClassMetaData(Class<?> clazz) {
 		
 		simpleName = clazz.getSimpleName();
 		fields = ReflectionHelper.getFields(clazz);
@@ -65,6 +65,42 @@ public class ClassReflectionParts {
 		return "Select " + fieldsNames
 				+ " from " + simpleName
 				+ " where " + idFieldName + " = ?";
+	}
+	
+	public String getSimpleName() {
+		return simpleName;
+	}
+	
+	public Field[] getFields() {
+		return fields;
+	}
+	
+	public Field getIdField() {
+		return idField;
+	}
+	
+	public String getIdString() {
+		return idFieldName;
+	}
+	
+	public Field[] getNoFields() {
+		return notIdFields;
+	}
+	
+	public Constructor<?> getDefaultConstructor() {
+		return defaultConstructor;
+	}
+	
+	public String getInsertCommand() {
+		return insertCommand;
+	}
+	
+	public String getUpdateCommand() {
+		return updateCommand;
+	}
+	
+	public String getSelectCommand() {
+		return selectCommand;
 	}
 	
 }

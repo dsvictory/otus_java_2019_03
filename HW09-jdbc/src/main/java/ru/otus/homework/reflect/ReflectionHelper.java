@@ -1,8 +1,11 @@
-package ru.otus.homework;
+package ru.otus.homework.reflect;
 
 import java.lang.reflect.*;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import ru.otus.homework.jdbc.Id;
 
 public final class ReflectionHelper {
 
@@ -34,7 +37,7 @@ public final class ReflectionHelper {
 			.toArray(size -> new Field[size]);
 	}
 	
-	public static Constructor getDefaultConstructor(Class<?> clazz) {
+	public static Constructor<?> getDefaultConstructor(Class<?> clazz) {
 		Constructor<?> constructor = null;
 		try {
 			constructor = clazz.getConstructor();
@@ -43,6 +46,23 @@ public final class ReflectionHelper {
 			System.out.println(ex.getMessage());
 		}
 		return constructor;
+	}
+	
+	public static void setFieldsValuesToCommand(PreparedStatement pst, Field[] fields, Object obj) {
+		try {
+			for (int i = 0; i < fields.length; i++) {
+	        	boolean isAccessible = fields[i].canAccess(obj);
+	        	if (!isAccessible) { fields[i].setAccessible(true); }
+	        	
+	        	Object value = fields[i].get(obj);
+	        	pst.setObject(i+1, value);
+	        	
+	        	if (!isAccessible) { fields[i].setAccessible(true); }
+	        }
+		}
+		catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
 	}
 	
 }

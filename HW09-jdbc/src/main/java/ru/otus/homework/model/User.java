@@ -1,4 +1,6 @@
-package ru.otus.homework;
+package ru.otus.homework.model;
+
+import ru.otus.homework.jdbc.Id;
 
 public class User {
 
