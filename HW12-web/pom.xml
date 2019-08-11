@@ -17,6 +17,14 @@
     </properties>
 
     <dependencies>
+    
+    	<!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+		<dependency>
+		    <groupId>org.freemarker</groupId>
+		    <artifactId>freemarker</artifactId>
+		    <version>2.3.28</version>
+		</dependency>
+    
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>

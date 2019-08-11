@@ -7,50 +7,48 @@ import ru.otus.homework.hibernate.ORMTemplate;
 import ru.otus.homework.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 public class UsersList extends HttpServlet {
 
+	private static final String TEMPLATE_NAME = "users_list.ftl";
+	
+	private static final String USERS_MODEL_KEY = "users";
+	
 	private static final long serialVersionUID = 1L;
 
 	private final ORMTemplate<User> orm;
+	private final Configuration config;
 	
-	public UsersList(ORMTemplate<User> orm) {
+	public UsersList(ORMTemplate<User> orm, Configuration config) {
 		this.orm = orm;
+		this.config = config;
 	}
 	
 	@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
-        StringBuffer resultAsString = new StringBuffer("<h1>Users list:</h1> ");
-        resultAsString.append("<table>" +
-    							"<thead>" + 
-    								"<tr>" + 
-    									"<th>ID</th>" + 
-    									"<th>Name</th>" + 
-    								"</tr>" + 
-    							"</thead>" +
-    							"<tbody>");
+		Map<String, Object> root = new HashMap<>();
+		root.put(USERS_MODEL_KEY, orm.getAll(User.class));
+		
+        Template temp = config.getTemplate(TEMPLATE_NAME);
         
-        List<User> usersList = orm.getAll(User.class);
-        for (User user : usersList) {
-        	
-        	resultAsString.append("<tr>" +
-        							"<td>" + user.getId() + "</td>" +
-        							"<td>" + user.getName() + "</td>" +
-        						"</tr>");
-        	
-        }
-        
-        resultAsString.append("</tbody>" +
-							"</table>");
-        
-        resultAsString.append("<a href=\"\\admin\">To the admin page!</a>");
-
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
         PrintWriter printWriter = response.getWriter();
-        printWriter.print(resultAsString);
-        printWriter.flush();
+        
+        try {
+			temp.process(root, printWriter);
+		} catch (TemplateException e) {
+			e.printStackTrace();
+		}
     }
+	
+	
+	
 }
