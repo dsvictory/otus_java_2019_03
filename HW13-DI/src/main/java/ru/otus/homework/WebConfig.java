@@ -10,6 +10,11 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+import ru.otus.homework.domain.User;
+import ru.otus.homework.orm.ORMManager;
+import ru.otus.homework.orm.ORMManagerImpl;
+import ru.otus.homework.orm.ORMTemplate;
+
 @Configuration
 @ComponentScan
 @EnableWebMvc
@@ -47,5 +52,11 @@ public class WebConfig {
         viewResolver.setOrder(1);
         viewResolver.setCharacterEncoding("UTF-8");
         return viewResolver;
+    }
+    
+    @Bean
+    public ORMTemplate<User> ormTemplate() {
+    	ORMManager<User> ormManager = new ORMManagerImpl();
+    	return ormManager.getORM();
     }
 }

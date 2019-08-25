@@ -1,12 +1,10 @@
-package ru.otus.homework.services;
+package ru.otus.homework.orm;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.springframework.stereotype.Service;
 
 import ru.otus.homework.domain.User;
 
-@Service
 public class ORMManagerImpl implements ORMManager<User> {
 
 	private final ORMTemplate<User> orm;

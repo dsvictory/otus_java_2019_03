@@ -1,4 +1,4 @@
-package ru.otus.homework.services;
+package ru.otus.homework.orm;
 
 import org.hibernate.Transaction;
 

@@ -2,8 +2,8 @@ package ru.otus.homework.repostory;
 
 import org.springframework.stereotype.Repository;
 import ru.otus.homework.domain.User;
-import ru.otus.homework.services.ORMManager;
-import ru.otus.homework.services.ORMTemplate;
+import ru.otus.homework.orm.ORMTemplate;
+
 import java.util.List;
 
 @Repository
@@ -11,8 +11,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final ORMTemplate<User> orm;
 
-    public UserRepositoryImpl(ORMManager<User> ormManager) {
-        this.orm = ormManager.getORM();
+    public UserRepositoryImpl(ORMTemplate<User> ormTemplate) {
+        this.orm = ormTemplate;
     }
 
     @Override
