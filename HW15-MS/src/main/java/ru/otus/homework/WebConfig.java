@@ -10,6 +10,8 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+import ru.otus.homework.messageSystem.MessageSystemContext;
+
 @Configuration
 @ComponentScan
 @EnableWebMvc
