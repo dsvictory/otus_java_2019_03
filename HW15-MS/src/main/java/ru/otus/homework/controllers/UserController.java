@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
+
+import ru.otus.homework.WebConfig;
 import ru.otus.homework.domain.User;
 import ru.otus.homework.messageSystem.Address;
 import ru.otus.homework.messageSystem.FrontendService;
@@ -16,17 +18,19 @@ import ru.otus.homework.messageSystem.MsgGetUsers;
 
 import java.util.*;
 
+import javax.annotation.Resource;
+
 @Controller
 public class UserController implements FrontendService {
 
-	private final Address address;
+	private Address address;
     private final MessageSystemContext context;
     
     private List<User> users = new ArrayList<>();
 
     public UserController(MessageSystemContext context) {
-    	this.address = new Address("Frontend");
     	this.context = context;
+    	init();
     }
 
     @GetMapping({"/", "/user/list"})
@@ -53,6 +57,11 @@ public class UserController implements FrontendService {
         return new RedirectView("/user/list", true);
     }
 
+    @Resource(name = WebConfig.FRONTEND_ADDRESS)
+    public void setAddress(Address address) {
+    	this.address = address;
+    }
+    
 	@Override
 	public Address getAddress() {
 		return address;

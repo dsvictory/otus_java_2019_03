@@ -3,9 +3,12 @@ package ru.otus.homework.orm;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
+import ru.otus.homework.WebConfig;
 import ru.otus.homework.domain.User;
 import ru.otus.homework.messageSystem.*;
 import java.util.List;
+
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,7 +20,7 @@ public class DBServiceImpl implements DBService {
 	
 	private static final String CONFIG_FILE_NAME = "hibernate.cfg.xml";
 	
-	private final Address address;
+	private Address address;
     private final MessageSystemContext context;
 	
 	private long lastInsertedId = 0;
@@ -28,8 +31,8 @@ public class DBServiceImpl implements DBService {
 		this.sessionFactory = new org.hibernate.cfg.Configuration().configure(CONFIG_FILE_NAME)
     			.addAnnotatedClass(User.class)
     	        .buildSessionFactory();
-		this.address = new Address("DBService");
 		this.context = context;
+		init();
 	}
 	
 	@Override
@@ -86,6 +89,11 @@ public class DBServiceImpl implements DBService {
 		context.getMessageSystem().addAddressee(this);
 	}
 
+	@Resource(name = WebConfig.DB_SERVICE_ADDRESS)
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	
 	@Override
 	public Address getAddress() {
 		return address;

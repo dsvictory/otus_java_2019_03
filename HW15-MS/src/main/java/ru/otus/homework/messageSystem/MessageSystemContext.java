@@ -1,9 +1,12 @@
 package ru.otus.homework.messageSystem;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.*;
 
+import ru.otus.homework.WebConfig;
 import ru.otus.homework.messageSystem.Address;
 import ru.otus.homework.messageSystem.MessageSystem;
+
+import javax.annotation.*;
 
 @Service
 public class MessageSystemContext {
@@ -24,6 +27,7 @@ public class MessageSystemContext {
         return frontAddress;
     }
 
+    @Resource(name = WebConfig.FRONTEND_ADDRESS)
     public void setFrontAddress(Address frontAddress) {
         this.frontAddress = frontAddress;
     }
@@ -32,6 +36,7 @@ public class MessageSystemContext {
         return dbAddress;
     }
 
+    @Resource(name = WebConfig.DB_SERVICE_ADDRESS)
     public void setDbAddress(Address dbAddress) {
         this.dbAddress = dbAddress;
     }
