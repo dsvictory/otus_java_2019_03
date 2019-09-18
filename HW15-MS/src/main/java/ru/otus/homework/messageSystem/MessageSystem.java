@@ -1,6 +1,10 @@
 package ru.otus.homework.messageSystem;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +33,6 @@ public final class MessageSystem {
     public void sendMessage(Message message) {
         messagesMap.get(message.getTo()).add(message);
     }
-
 
     public void start() {
         for (Map.Entry<Address, Addressee> entry : addresseeMap.entrySet()) {

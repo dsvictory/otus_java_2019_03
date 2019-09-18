@@ -8,6 +8,7 @@ import ru.otus.homework.domain.User;
 import ru.otus.homework.messageSystem.*;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import org.hibernate.Session;
@@ -32,7 +33,6 @@ public class DBServiceImpl implements DBService {
     			.addAnnotatedClass(User.class)
     	        .buildSessionFactory();
 		this.context = context;
-		init();
 	}
 	
 	@Override
@@ -84,6 +84,7 @@ public class DBServiceImpl implements DBService {
         return users;
 	}
 
+	@PostConstruct
 	@Override
 	public void init() {
 		context.getMessageSystem().addAddressee(this);

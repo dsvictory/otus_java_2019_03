@@ -18,6 +18,7 @@ import ru.otus.homework.messageSystem.MsgGetUsers;
 
 import java.util.*;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 @Controller
@@ -30,7 +31,6 @@ public class UserController implements FrontendService {
 
     public UserController(MessageSystemContext context) {
     	this.context = context;
-    	init();
     }
 
     @GetMapping({"/", "/user/list"})
@@ -40,6 +40,8 @@ public class UserController implements FrontendService {
         /*
          * Тут сокет к users
          */
+        
+        users.add(new User("Petya"));
         
         model.addAttribute("users", users);
         return "userList.html";
@@ -72,6 +74,7 @@ public class UserController implements FrontendService {
 		return context.getMessageSystem();
 	}
 
+	@PostConstruct
 	@Override
 	public void init() {
 		context.getMessageSystem().addAddressee(this);
