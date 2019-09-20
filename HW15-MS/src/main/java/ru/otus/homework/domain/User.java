@@ -24,7 +24,7 @@ public class User {
 
     public User() {
     }
-
+    
     public long getId() {
         return id;
     }
@@ -42,4 +42,5 @@ public class User {
     	return "User: id = " + this.id
     				+ ", name = " + this.name;
     }
+    
 }

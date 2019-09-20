@@ -1,9 +1,7 @@
-package ru.otus.homework.messageSystem;
+package ru.otus.homework.messages;
 
+import ru.otus.homework.messageSystem.*;
 
-/**
- * Created by tully.
- */
 public abstract class MsgToDB extends Message {
     public MsgToDB(Address from, Address to) {
         super(from, to);
