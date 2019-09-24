@@ -2,9 +2,7 @@ package ru.otus.homework.messageSystem;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * @author tully
- */
+
 public final class Address {
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
     private final String id;

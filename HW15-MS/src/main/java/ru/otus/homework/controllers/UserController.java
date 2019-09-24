@@ -1,11 +1,14 @@
 package ru.otus.homework.controllers;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.view.RedirectView;
 
 import ru.otus.homework.WebConfig;
 import ru.otus.homework.domain.User;
@@ -13,60 +16,41 @@ import ru.otus.homework.messageSystem.Address;
 import ru.otus.homework.messageSystem.FrontendService;
 import ru.otus.homework.messageSystem.MessageSystem;
 import ru.otus.homework.messageSystem.MessageSystemContext;
-import ru.otus.homework.messageSystem.MsgCreateUser;
-import ru.otus.homework.messageSystem.MsgGetUsers;
-
-import java.util.*;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import ru.otus.homework.messages.MsgCreateUser;
 
 @Controller
 public class UserController implements FrontendService {
-
-	private Address address;
-    private final MessageSystemContext context;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     
-    private List<User> users = new ArrayList<>();
-
+    private final static String RESPONSE_URL = "/topic/response";
+    
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+    
+    private final MessageSystemContext context;
+    private Address address;
+    
     public UserController(MessageSystemContext context) {
     	this.context = context;
     }
-
-    @GetMapping({"/", "/user/list"})
-    public String userList(Model model) {
-        getMS().sendMessage(new MsgGetUsers(this.getAddress(), context.getDbAddress()));
+    
+    @MessageMapping("/user")
+    public void saveNewUser(User newUser) {
+        logger.info("got message:{}" + newUser);
+        context.getMessageSystem().start();
+        context.getMessageSystem().sendMessage(new MsgCreateUser(getAddress(), context.getDbAddress(), newUser));
         
-        /*
-         * Тут сокет к users
-         */
-        
-        users.add(new User("Petya"));
-        
-        model.addAttribute("users", users);
-        return "userList.html";
-    }
-
-    @GetMapping("/user/create")
-    public String userCreate(Model model) {
-        model.addAttribute("user", new User());
-        return "userCreate.html";
-    }
-
-    @PostMapping("/user/save")
-    public RedirectView userSave(@ModelAttribute User user) {
-    	getMS().sendMessage(new MsgCreateUser(this.getAddress(), context.getDbAddress(), user));
-        return new RedirectView("/user/list", true);
+        //simpMessagingTemplate.convertAndSend("/topic/response", newUser);
     }
 
     @Resource(name = WebConfig.FRONTEND_ADDRESS)
     public void setAddress(Address address) {
-    	this.address = address;
-    }
+		this.address = address;
+	}
     
 	@Override
 	public Address getAddress() {
-		return address;
+		return this.address;
 	}
 
 	@Override
@@ -77,12 +61,14 @@ public class UserController implements FrontendService {
 	@PostConstruct
 	@Override
 	public void init() {
+		context.setFrontAddress(getAddress());
 		context.getMessageSystem().addAddressee(this);
 	}
 
 	@Override
-	public void setUsers(List<User> users) {
-		this.users = users;
+	public void addUser(User newUser) {
+		logger.info("got returning user:{}" + newUser);
+		simpMessagingTemplate.convertAndSend(RESPONSE_URL, newUser);
 	}
 
 }

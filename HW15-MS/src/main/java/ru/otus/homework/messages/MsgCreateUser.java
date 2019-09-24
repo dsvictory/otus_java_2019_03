@@ -1,6 +1,8 @@
-package ru.otus.homework.messageSystem;
+package ru.otus.homework.messages;
 
 import ru.otus.homework.domain.User;
+import ru.otus.homework.messageSystem.Address;
+import ru.otus.homework.messageSystem.DBService;
 
 public class MsgCreateUser extends MsgToDB {
 
@@ -13,12 +15,12 @@ public class MsgCreateUser extends MsgToDB {
 
 	@Override
 	public void exec(DBService dbService) {
-		dbService.saveUser(newUser);
+		long savedUserId = dbService.saveUser(newUser);
 		dbService.getMS().sendMessage(
-			new MsgGetUsersAnswer(
+			new MsgCreateUserAnswer(
 				getTo(), 
 				getFrom(), 
-				dbService.getUsers()
+				dbService.getUser(savedUserId)
 		));
 	}
 }

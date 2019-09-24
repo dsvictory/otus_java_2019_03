@@ -1,8 +1,7 @@
-package ru.otus.homework.messageSystem;
+package ru.otus.homework.messages;
 
-/**
- * Created by tully.
- */
+import ru.otus.homework.messageSystem.*;
+
 public abstract class MsgToFrontend extends Message {
     public MsgToFrontend(Address from, Address to) {
         super(from, to);

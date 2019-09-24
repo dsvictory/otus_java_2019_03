@@ -87,6 +87,7 @@ public class DBServiceImpl implements DBService {
 	@PostConstruct
 	@Override
 	public void init() {
+		context.setDbAddress(getAddress());
 		context.getMessageSystem().addAddressee(this);
 	}
 
