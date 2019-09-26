@@ -1,4 +1,4 @@
-package ru.otus.homework.frontend;
+package ru.otus.homework.frontend.socketSystem;
 
 import java.io.IOException;
 import java.net.Socket;

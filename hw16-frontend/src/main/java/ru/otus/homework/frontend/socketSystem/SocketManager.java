@@ -1,16 +1,16 @@
-package ru.otus.homework.frontend;
+package ru.otus.homework.frontend.socketSystem;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
-import ru.otus.homework.frontend.domain.User;
+import ru.otus.homework.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ru.otus.homework.frontend.messageSystem.FrontendService;
 import ru.otus.homework.messages.Message;
+import ru.otus.homework.messages.MsgAddressInfo;
 
 import com.google.gson.Gson;
 
@@ -24,16 +24,18 @@ public class SocketManager {
     private FrontendService messageExecutor;
     
     private ClientSocketMessageWorker client;
-    /*
+    
     @PostConstruct
     public void init() throws Exception {
     	start();
     }
-    */
+    
     private void start() throws Exception {
         client = new ClientSocketMessageWorker(HOST, PORT);
         client.init();
         System.out.println("Start client!");
+        
+    	sendMessage(new MsgAddressInfo(messageExecutor.getAddress()));
 
         ExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.submit(() -> {

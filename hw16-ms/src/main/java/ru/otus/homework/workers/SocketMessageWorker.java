@@ -5,8 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import ru.otus.homework.annotation.Blocks;
+import ru.otus.homework.messageSystem.Address;
 import ru.otus.homework.messages.Message;
-import ru.otus.homework.messages.PingMessage;
+import ru.otus.homework.messages.MsgAddressInfo;
+import ru.otus.homework.messages.MsgCreateUser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +23,8 @@ public class SocketMessageWorker implements MessageWorker {
     private final ExecutorService executorService;
     private final Socket socket;
 
+    private Address connectedAddress;
+    
     private final BlockingQueue<Message> output = new LinkedBlockingQueue<>();
     private final BlockingQueue<Message> input = new LinkedBlockingQueue<>();
 
@@ -79,7 +83,15 @@ public class SocketMessageWorker implements MessageWorker {
                 if (inputLine.isEmpty()){
                     String json = stringBuilder.toString();
                     Message message = getMessageFromGson(json);
-                    input.add(message);
+                    
+                    System.out.println("Get message: " + message);
+                    
+                    if (message.getTo() != null) {
+                    	input.add(message);
+                    }
+                    else {
+                    	this.connectedAddress = message.getFrom();
+                    }
                     stringBuilder = new StringBuilder();
                 }
             }
@@ -93,9 +105,26 @@ public class SocketMessageWorker implements MessageWorker {
 
         JsonParser parser = new JsonParser();
         JsonObject jsonObject = (JsonObject) parser.parse(json);
-        //String className = String.valueOf(jsonObject.get(Message.CLASS_NAME_VARIABLE));
-        Class<?> messageClass = PingMessage.class;
-
+        
+        String className = String.valueOf(jsonObject.get(Message.CLASS_NAME_VARIABLE));
+        
+        Class<?> messageClass = null;
+        
+        if (className.contains(MsgCreateUser.class.getName())) {
+        	messageClass = MsgCreateUser.class;
+        }
+        if (className.contains(MsgAddressInfo.class.getName())) {
+        	messageClass = MsgAddressInfo.class;
+        }
+        
         return (Message) new Gson().fromJson(json, messageClass);
+        
     }
+
+	@Override
+	public Address getConnectedAddress() {
+		return connectedAddress;
+	}
+    
+    
 }
