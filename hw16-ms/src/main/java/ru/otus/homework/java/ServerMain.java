@@ -19,8 +19,8 @@ public class ServerMain {
 	private static final String FRONTEND_START_COMMAND = "java -jar ../hw16-frontend/target/hw16-frontend-1.0-SNAPSHOT.jar";
     
     private static final String DBSERVICE_START_COMMAND = "java -jar ../hw16-dbservice/target/hw16-dbservice-1.0-SNAPSHOT-jar-with-dependencies.jar";
-   
-    private static final int CLIENTS_NUMBER = 2;
+    
+    private static final int CLIENTS_NUMBER = 4;
 
 	private static final int CLIENT_START_DELAY_SEC = 5;
 	
@@ -61,6 +61,8 @@ public class ServerMain {
 	private List<String> getCommands() {
 		List<String> commands = new ArrayList<>();
 		commands.add(FRONTEND_START_COMMAND);
+		commands.add(FRONTEND_START_COMMAND);
+		commands.add(DBSERVICE_START_COMMAND);
 		commands.add(DBSERVICE_START_COMMAND);
 		return commands;
 	}
