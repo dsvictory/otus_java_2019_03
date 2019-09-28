@@ -7,31 +7,31 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import ru.otus.homework.frontend.SocketManager;
-import ru.otus.homework.frontend.domain.User;
+import ru.otus.homework.domain.User;
+import ru.otus.homework.frontend.socketSystem.FrontendService;
+import ru.otus.homework.frontend.socketSystem.SocketManager;
 import ru.otus.homework.messageSystem.Address;
 import ru.otus.homework.messages.*;
-import ru.otus.homework.frontend.messages.MsgCreateUser;
-import ru.otus.homework.frontend.messageSystem.FrontendService;
 
 @Controller
 public class UserController implements FrontendService {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    
+    public static final Address ADDRESS_FROM = new Address("Frontend");
+    
+    public static final Address ADDRESS_TO = new Address("DBService");
     
     private final static String RESPONSE_URL = "/topic/response";
     
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     
-    private final SocketManager socketManager; 
+    @Autowired
+    private SocketManager socketManager; 
     
-    public UserController(SocketManager socketManager) {
+    public void setSocketManager(SocketManager socketManager) {
     	this.socketManager = socketManager;
     }
-    
-    private static final Address ADDRESS_FROM = new Address("Frontend");
-    
-    private static final Address ADDRESS_TO = new Address("DBService");
     
     @MessageMapping("/user")
     public void saveNewUser(User newUser) {
@@ -54,5 +54,6 @@ public class UserController implements FrontendService {
 		logger.info("got returning user:{}", newUser);
 		simpMessagingTemplate.convertAndSend(RESPONSE_URL, newUser);
 	}
+
 
 }

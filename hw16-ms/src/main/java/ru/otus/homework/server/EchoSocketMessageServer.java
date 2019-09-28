@@ -46,9 +46,14 @@ public class EchoSocketMessageServer implements EchoSocketMessageServerMBean {
             for (MessageWorker worker : workers){
                 Message message = worker.pool();
                 if (message != null){
-                    System.out.println("Mirroring the message: " + message.toString());
-                    worker.send(message);
-                    message = worker.pool();
+	                for (MessageWorker w : workers) {
+	                	if (w.getConnectedAddress().equals(message.getTo())) {
+	                		System.out.println("Mirroring the message: " + message.toString());
+	                        w.send(message);
+	                        message = worker.pool();
+	                        break;
+	                	}
+	                }
                 }
             }
             try {
