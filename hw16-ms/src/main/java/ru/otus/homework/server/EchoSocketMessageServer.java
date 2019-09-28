@@ -1,6 +1,5 @@
 package ru.otus.homework.server;
 
-import ru.otus.homework.annotation.Blocks;
 import ru.otus.homework.messages.Message;
 import ru.otus.homework.workers.MessageWorker;
 import ru.otus.homework.workers.SocketMessageWorker;
@@ -26,7 +25,6 @@ public class EchoSocketMessageServer implements EchoSocketMessageServerMBean {
         workers = new CopyOnWriteArrayList<>();
     }
 
-    @Blocks
     public void start() throws Exception{
         excecutorService.submit(this::mirror);
 

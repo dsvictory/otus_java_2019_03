@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import ru.otus.homework.annotation.Blocks;
 import ru.otus.homework.messageSystem.Address;
 import ru.otus.homework.messages.Message;
 import ru.otus.homework.messages.MsgAddressInfo;
@@ -59,7 +58,6 @@ public class SocketMessageWorker implements MessageWorker {
         executorService.shutdown();
     }
 
-    @Blocks
     private void sendMessage(){
         try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true)){
             while (socket.isConnected()){
@@ -73,7 +71,6 @@ public class SocketMessageWorker implements MessageWorker {
         }
     }
 
-    @Blocks
     private void receiveMessage(){
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))){
             String inputLine;

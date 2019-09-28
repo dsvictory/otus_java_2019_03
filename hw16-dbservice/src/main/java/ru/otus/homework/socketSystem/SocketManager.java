@@ -8,6 +8,7 @@ import ru.otus.homework.dbservice.orm.DBService;
 import ru.otus.homework.domain.User;
 import ru.otus.homework.messages.Message;
 import ru.otus.homework.messages.MsgAddressInfo;
+import ru.otus.homework.messages.MsgCreateUser;
 
 import com.google.gson.Gson;
 
@@ -38,7 +39,7 @@ public class SocketManager {
 	            while (true){
 	                Message msg = client.take();
 	                
-	                User newUser = (User)new Gson().fromJson(msg.toString(), User.class);
+	                User newUser = (User)new Gson().fromJson(((MsgCreateUser)msg).getUserJson(), User.class);
 	                
 	                messageExecutor.saveUser(newUser);
 	            }

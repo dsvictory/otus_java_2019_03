@@ -85,12 +85,9 @@ public class DBServiceImpl implements DBService {
         return users;
 	}
 
-	
 	@Override
 	public Address getAddress() {
 		return ADDRESS_FROM;
 	}
-
-
 
 }

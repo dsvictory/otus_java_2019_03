@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import ru.otus.homework.messages.Message;
 import ru.otus.homework.messages.MsgAddressInfo;
+import ru.otus.homework.messages.MsgCreateUser;
 
 import com.google.gson.Gson;
 
@@ -41,7 +42,7 @@ public class SocketManager {
         executorService.submit(() -> {
             while (true){
                 Message msg = client.take();
-                messageExecutor.addUser((User)new Gson().fromJson(msg.toString(), User.class));
+                messageExecutor.addUser((User)new Gson().fromJson(((MsgCreateUser)msg).getUserJson(), User.class));
             }
         });
     }

@@ -14,8 +14,7 @@ public class MsgCreateUser extends Message {
 		this.newUser = newUser;
 	}
 	
-	@Override
-	public String toString() {
+	public String getUserJson() {
 		return new Gson().toJson(newUser);
 	}
 }
